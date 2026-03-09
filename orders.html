@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Delivery Tracking | BuildEasy</title>
+    <meta name="description"
+        content="Track your construction material deliveries in real-time with AI-powered GPS tracking, ETA prediction, and live map.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="orders.css">
+</head>
+
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ======== TOP NAVIGATION ======== -->
+    <header class="track-topbar">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="index.html" class="back-link">← Home</a>
+            <div class="topbar-brand">
+                <div class="logo-box">🏗</div>
+                <h2>Build<span>Easy</span></h2>
+            </div>
+        </div>
+        <div class="topbar-center">
+            <button class="view-btn active" onclick="setView('customer')">👤 Customer View</button>
+            <button class="view-btn" onclick="setView('admin')">🛡️ Admin View</button>
+        </div>
+        <div class="topbar-right">
+            <button class="topbar-icon" title="Notifications">🔔<span class="dot"></span></button>
+            <button class="topbar-icon" title="Refresh" onclick="refreshLocation()">🔄</button>
+            <div class="topbar-profile">
+                <div class="avatar">RK</div>
+                <span class="name">Rajesh K</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ======== MAIN LAYOUT ======== -->
+    <div class="track-main">
+
+        <!-- === MAP SECTION === -->
+        <div class="map-section">
+            <div id="trackMap"></div>
+
+            <!-- Floating Map Stats -->
+            <div class="map-stats">
+                <div class="map-stat">
+                    <span class="st-icon">🚚</span>
+                    <div>
+                        <div class="st-val" id="statTrucks">1</div>
+                        <div class="st-label">Active Trucks</div>
+                    </div>
+                </div>
+                <div class="map-stat">
+                    <span class="st-icon">📦</span>
+                    <div>
+                        <div class="st-val" id="statOrders">3</div>
+                        <div class="st-label">In Transit</div>
+                    </div>
+                </div>
+                <div class="map-stat">
+                    <span class="st-icon">📍</span>
+                    <div>
+                        <div class="st-val" id="statDist">4.2 km</div>
+                        <div class="st-label">Remaining</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Driver Info Card -->
+            <div class="driver-card" id="driverCard">
+                <div class="driver-row">
+                    <div class="driver-avatar">SM</div>
+                    <div>
+                        <div class="driver-name">Sundar Murugan</div>
+                        <div class="driver-sub">🚛 TN-01-AB-1234 • Tata 407</div>
+                    </div>
+                </div>
+                <div class="driver-stats">
+                    <div class="ds">
+                        <div class="ds-val" id="driverSpeed">38</div>
+                        <div class="ds-label">km/h Speed</div>
+                    </div>
+                    <div class="ds">
+                        <div class="ds-val" id="driverDist">4.2</div>
+                        <div class="ds-label">km Left</div>
+                    </div>
+                    <div class="ds">
+                        <div class="ds-val" id="driverEta">12</div>
+                        <div class="ds-label">min ETA</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ETA Badge -->
+            <div class="eta-badge" id="etaBadge">
+                🕐 Estimated Arrival: <strong id="etaTime">8:47 PM</strong> &nbsp;•&nbsp; <span id="etaMin">~12
+                    min</span>
+            </div>
+        </div>
+
+        <!-- === RIGHT PANEL === -->
+        <div class="detail-panel">
+
+            <!-- Order Summary -->
+            <div class="panel-section">
+                <div class="panel-title">📋 Order Summary</div>
+                <div class="order-summary">
+                    <div class="order-row"><span class="label">Order ID</span><span
+                            class="value highlight">#ORD-2041</span></div>
+                    <div class="order-row"><span class="label">Customer</span><span class="value">Rajesh Kumar</span>
+                    </div>
+                    <div class="order-row"><span class="label">Project Location</span><span class="value">T. Nagar,
+                            Chennai</span></div>
+                    <div class="order-row"><span class="label">Total Cost</span><span
+                            class="value highlight">₹24,350</span></div>
+                    <div class="order-row"><span class="label">Payment</span><span class="badge badge-paid">✓
+                            Paid</span></div>
+                </div>
+            </div>
+
+            <!-- Delivery Timeline -->
+            <div class="panel-section">
+                <div class="panel-title">🚚 Delivery Status</div>
+                <div class="timeline">
+                    <div class="tl-item done">
+                        <div class="tl-dot"></div>
+                        <h5>✓ Order Placed</h5>
+                        <div class="tl-time">Today, 2:15 PM</div>
+                    </div>
+                    <div class="tl-item done">
+                        <div class="tl-dot"></div>
+                        <h5>✓ Confirmed</h5>
+                        <div class="tl-time">Today, 2:18 PM</div>
+                    </div>
+                    <div class="tl-item done">
+                        <div class="tl-dot"></div>
+                        <h5>✓ Packed at Warehouse</h5>
+                        <div class="tl-time">Today, 3:05 PM</div>
+                    </div>
+                    <div class="tl-item current">
+                        <div class="tl-dot"></div>
+                        <h5>🚛 Out for Delivery</h5>
+                        <div class="tl-time">Left at 3:42 PM • En route</div>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h5>Arriving Soon</h5>
+                        <div class="tl-time">ETA ~12 min</div>
+                    </div>
+                    <div class="tl-item">
+                        <div class="tl-dot"></div>
+                        <h5>Delivered</h5>
+                        <div class="tl-time">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Inside Truck -->
+            <div class="panel-section">
+                <div class="panel-title">📦 Materials in Truck</div>
+                <div class="mat-list">
+                    <div class="mat-item">
+                        <div class="mat-icon">🧱</div>
+                        <div>
+                            <h5>OPC Cement 53 Grade</h5>
+                            <p>50 bags × ₹380 = ₹19,000</p>
+                        </div>
+                    </div>
+                    <div class="mat-item">
+                        <div class="mat-icon">🏖️</div>
+                        <div>
+                            <h5>River Sand (Fine)</h5>
+                            <p>1 ton × ₹2,800 = ₹2,800</p>
+                        </div>
+                    </div>
+                    <div class="mat-item">
+                        <div class="mat-icon">🔩</div>
+                        <div>
+                            <h5>TMT Steel 10mm</h5>
+                            <p>25 kg × ₹65 = ₹1,625</p>
+                        </div>
+                    </div>
+                    <div class="mat-item">
+                        <div class="mat-icon">🧱</div>
+                        <div>
+                            <h5>Red Bricks (Standard)</h5>
+                            <p>100 pcs × ₹9.25 = ₹925</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Prediction Panel -->
+            <div class="panel-section">
+                <div class="panel-title">🤖 AI Predictions</div>
+                <div class="ai-panel">
+                    <div class="ai-row">
+                        <span class="ai-label">🕐 Estimated Arrival</span>
+                        <span class="ai-val" id="aiEta">8:47 PM</span>
+                    </div>
+                    <div class="ai-row">
+                        <span class="ai-label">⚠️ Delay Risk</span>
+                        <span class="ai-val low" id="aiDelay">Low</span>
+                    </div>
+                    <div class="ai-row">
+                        <span class="ai-label">🌦️ Weather Impact</span>
+                        <span class="ai-val low" id="aiWeather">Clear — No impact</span>
+                    </div>
+                    <div class="ai-row">
+                        <span class="ai-label">🛣️ Route Status</span>
+                        <span class="ai-val low" id="aiRoute">Optimal route active</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons (Customer View) -->
+            <div class="panel-section" id="customerActions">
+                <div class="panel-title">⚡ Quick Actions</div>
+                <div class="action-btns">
+                    <button class="act-btn primary" onclick="callDriver()">📞 Call Driver</button>
+                    <button class="act-btn ghost" onclick="shareTracking()">🔗 Share Link</button>
+                </div>
+                <div class="action-btns" style="margin-top:8px;">
+                    <button class="act-btn danger" onclick="cancelDelivery()">✕ Cancel Order</button>
+                </div>
+            </div>
+
+            <!-- Admin Actions (hidden by default) -->
+            <div class="panel-section" id="adminActions" style="display:none;">
+                <div class="panel-title">🛡️ Admin Controls</div>
+                <div class="action-btns">
+                    <button class="act-btn primary" onclick="updateStatus()">📋 Update Status</button>
+                    <button class="act-btn ghost"
+                        onclick="showToast('Inventory impact: -50 cement bags, -1t sand','info')">📦 Inventory
+                        Preview</button>
+                </div>
+                <div class="action-btns" style="margin-top:8px;">
+                    <button class="act-btn ghost" onclick="showToast('Reassigning driver...','info')">🔄 Reassign
+                        Driver</button>
+                    <button class="act-btn ghost" onclick="showToast('Route recalculated','info')">🛣️ Reroute</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="orders.js"></script>
+</body>
+
+</html>

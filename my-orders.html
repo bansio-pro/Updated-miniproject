@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | BuildEasy</title>
+    <meta name="description"
+        content="View, track, and manage all your BuildEasy construction material orders in one dashboard.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="my-orders.css">
+</head>
+
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ======== TOP NAVIGATION ======== -->
+    <header class="track-topbar">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="index.html" class="back-link">← Home</a>
+            <div class="topbar-brand">
+                <div class="logo-box">🏗</div>
+                <h2>Build<span>Easy</span></h2>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+            <a href="materials.html" class="back-link">🛒 Order Materials</a>
+            <a href="orders.html" class="back-link">📍 Track Delivery</a>
+        </div>
+    </header>
+
+    <!-- ======== PAGE HEADER ======== -->
+    <section class="page-header">
+        <div class="page-header-inner">
+            <div>
+                <h1>
+                    <span class="icon">📋</span>
+                    My Orders
+                </h1>
+                <p>Track and manage your placed orders</p>
+            </div>
+            <div class="order-stats">
+                <div class="order-stat">
+                    <div class="stat-val" id="statTotal">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="order-stat">
+                    <div class="stat-val" id="statActive">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="order-stat">
+                    <div class="stat-val" id="statDelivered">0</div>
+                    <div class="stat-label">Delivered</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== ORDERS TABLE ======== -->
+    <main class="orders-container">
+
+        <div class="orders-table-wrap" id="ordersTableWrap">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Project Location</th>
+                        <th>Total Cost</th>
+                        <th>Payment</th>
+                        <th>Delivery Status</th>
+                        <th>Driver</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Loading State -->
+        <div class="empty-state" id="loadingState" style="display:none;">
+            <div class="empty-illustration" style="animation:spin 1.5s linear infinite;">⏳</div>
+            <h3>Loading Orders...</h3>
+            <p>Fetching your orders from the server</p>
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <div class="empty-illustration">📦</div>
+            <h3>No Orders Yet</h3>
+            <p>No orders yet. Start by placing your first order!</p>
+            <a href="materials.html" class="btn-start">🛒 Order Materials →</a>
+        </div>
+
+    </main>
+
+    <!-- ======== ORDER DETAILS MODAL ======== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>📋 Order <span class="modal-order-id" id="modalOrderId"></span></h2>
+                <button class="modal-close" onclick="closeModal()" aria-label="Close modal">✕</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Order Info -->
+                <div class="modal-section">
+                    <div class="modal-section-title">📝 Order Information</div>
+                    <div class="modal-info-grid" id="modalInfoGrid"></div>
+                </div>
+
+                <!-- Materials -->
+                <div class="modal-section">
+                    <div class="modal-section-title">📦 Materials Ordered</div>
+                    <div class="modal-mat-list" id="modalMaterials"></div>
+                </div>
+
+                <!-- Delivery Progress -->
+                <div class="modal-section">
+                    <div class="modal-section-title" id="modalDeliveryLabel">🚚 Delivery Progress</div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="modalProgress" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- Status Timeline -->
+                    <div class="modal-timeline" id="modalTimeline"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="my-orders.js"></script>
+</body>
+
+</html>

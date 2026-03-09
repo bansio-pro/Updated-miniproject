@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard | BuildEasy</title>
+    <meta name="description"
+        content="BuildEasy Company Dashboard — Manage materials, orders, and drivers for your construction materials business.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="company-dashboard.css">
+</head>
+
+<body>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container"></div>
+
+    <!-- ======== SIDEBAR ======== -->
+    <aside class="cd-sidebar" id="cdSidebar">
+        <div class="sidebar-brand">
+            <div class="logo-icon">🏢</div>
+            <h2>Build<span>Easy</span></h2>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Company</div>
+            <div class="nav-item active" data-page="page-dashboard">
+                <span class="icon">📊</span><span class="label">Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="page-materials">
+                <span class="icon">📦</span><span class="label">Materials</span>
+            </div>
+            <div class="nav-item" data-page="page-orders">
+                <span class="icon">🛒</span><span class="label">Orders</span><span class="badge"
+                    id="orderBadge">0</span>
+            </div>
+            <div class="nav-item" data-page="page-drivers">
+                <span class="icon">🚛</span><span class="label">Drivers</span>
+            </div>
+            <div class="nav-item" data-page="page-profile">
+                <span class="icon">💼</span><span class="label">Profile</span>
+            </div>
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-item" onclick="window.location.href='index.html'">
+                <span class="icon">🏠</span><span class="label">Back to Home</span>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="avatar" id="sidebarAvatar">CO</div>
+            <div class="info">
+                <h4 id="sidebarCompanyName">Company</h4>
+                <p id="sidebarApprovalStatus">Pending Approval</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ======== TOP BAR ======== -->
+    <header class="cd-topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <div>
+                <div class="page-title">Dashboard</div>
+                <div class="breadcrumb">Company / Dashboard</div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-profile">
+                <div class="avatar" id="topbarAvatar">CO</div>
+                <div>
+                    <div class="name" id="topbarCompanyName">Company</div>
+                    <div class="role">Company Portal</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="btnLogout">🚪 Logout</button>
+        </div>
+    </header>
+
+    <!-- ======== MAIN CONTENT ======== -->
+    <main class="cd-main">
+
+        <!-- ===== DASHBOARD ===== -->
+        <section class="cd-page active" id="page-dashboard">
+            <div class="company-code-banner" id="companyCodeBanner"
+                style="display:flex;align-items:center;gap:12px;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.15);border-radius:14px;padding:14px 20px;margin-bottom:20px;">
+                <span style="font-size:22px;">🏢</span>
+                <div>
+                    <div
+                        style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;">
+                        Company ID</div>
+                    <div style="font-size:16px;font-weight:800;color:#14b8a6;" id="companyCodeDisplay">—</div>
+                </div>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="card-icon teal">📦</div>
+                    <h3 id="statMaterials">—</h3>
+                    <p>Total Products</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon blue">🛒</div>
+                    <h3 id="statOrders">—</h3>
+                    <p>Total Orders</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon orange">🚛</div>
+                    <h3 id="statDrivers">—</h3>
+                    <p>Active Drivers</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon green">⏳</div>
+                    <h3 id="statPending">—</h3>
+                    <p>Pending Orders</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon purple">💰</div>
+                    <h3 id="statRevenue">—</h3>
+                    <p>Revenue</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon" style="background:rgba(239,68,68,0.15);">⚠️</div>
+                    <h3 id="statLowStock">—</h3>
+                    <p>Low Stock Alerts</p>
+                </div>
+            </div>
+            <div class="approval-banner" id="approvalBanner" style="display:none;">
+                <span>⚠️</span>
+                <p>Your company is <strong>pending admin approval</strong>. Materials won't be visible to customers
+                    until approved.</p>
+            </div>
+        </section>
+
+        <!-- ===== MATERIALS ===== -->
+        <section class="cd-page" id="page-materials">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>📦 My Materials</h4>
+                    <button class="btn-sm btn-accent" id="btnAddMaterial">+ Add Material</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Approved</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materialsTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== ORDERS ===== -->
+        <section class="cd-page" id="page-orders">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>🛒 Company Orders</h4>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== DRIVERS ===== -->
+        <section class="cd-page" id="page-drivers">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>🚛 My Drivers</h4>
+                    <button class="btn-sm btn-accent" id="btnAddDriver">+ Add Driver</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>License</th>
+                            <th>Vehicle</th>
+                            <th>Approval</th>
+                            <th>Account</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="driversTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== PROFILE ===== -->
+        <section class="cd-page" id="page-profile">
+            <div class="table-card" style="padding:28px;">
+                <h4 style="font-size:18px;font-weight:700;color:#f8fafc;margin-bottom:20px;">🏢 Company Profile</h4>
+                <div id="profileContent" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Company
+                            ID</label>
+                        <p id="profCode" style="font-size:15px;font-weight:600;color:#14b8a6;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Company
+                            Name</label>
+                        <p id="profName" style="font-size:15px;font-weight:600;color:#f8fafc;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Email</label>
+                        <p id="profEmail" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Phone</label>
+                        <p id="profPhone" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">GST
+                            Number</label>
+                        <p id="profGST" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Business
+                            Type</label>
+                        <p id="profBizType" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item" style="grid-column:span 2;"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Address</label>
+                        <p id="profAddress" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item" style="grid-column:span 2;"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Description</label>
+                        <p id="profDesc" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Approval
+                            Status</label>
+                        <p id="profApproval" style="font-size:14px;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Registered</label>
+                        <p id="profCreated" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Location</label>
+                        <p id="profLocation" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                    <div class="profile-item"><label
+                            style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">Owner</label>
+                        <p id="profOwner" style="font-size:14px;color:#cbd5e1;margin-top:4px;">—</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== ADD MATERIAL MODAL ===== -->
+    <div class="modal-overlay" id="addMaterialModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>Add New Material</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('addMaterialModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Material Name</label><input type="text" id="matName"
+                        placeholder="e.g. OPC Cement 43 Grade"></div>
+                <div class="form-group"><label>Category</label>
+                    <select id="matCategory">
+                        <option>Cement</option>
+                        <option>Steel</option>
+                        <option>Sand</option>
+                        <option>Bricks</option>
+                        <option>Paint</option>
+                        <option>Aggregates</option>
+                        <option>Tiles</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Price (₹)</label><input type="number" id="matPrice"
+                        placeholder="e.g. 380"></div>
+                <div class="form-group"><label>Stock Quantity</label><input type="number" id="matStock"
+                        placeholder="e.g. 500"></div>
+                <div class="form-group"><label>Unit</label><input type="text" id="matUnit"
+                        placeholder="e.g. bags, tons, pieces" value="bags"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('addMaterialModal').classList.remove('active')">Cancel</button>
+                <button class="btn-modal primary" id="btnSubmitMaterial">Add Material</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== EDIT MATERIAL MODAL ===== -->
+    <div class="modal-overlay" id="editMaterialModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>✏️ Edit Material</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('editMaterialModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editMatId">
+                <div class="form-group"><label>Material Name</label><input type="text" id="editMatName"></div>
+                <div class="form-group"><label>Category</label>
+                    <select id="editMatCategory">
+                        <option>Cement</option>
+                        <option>Steel</option>
+                        <option>Sand</option>
+                        <option>Bricks</option>
+                        <option>Paint</option>
+                        <option>Aggregates</option>
+                        <option>Tiles</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Price (₹)</label><input type="number" id="editMatPrice"></div>
+                <div class="form-group"><label>Stock Quantity</label><input type="number" id="editMatStock"></div>
+                <div class="form-group"><label>Unit</label><input type="text" id="editMatUnit"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('editMaterialModal').classList.remove('active')">Cancel</button>
+                <button class="btn-modal primary" id="btnUpdateMaterial">Update Material</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ADD DRIVER MODAL ===== -->
+    <div class="modal-overlay" id="addDriverModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>Add New Driver</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('addDriverModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Driver Name</label><input type="text" id="drvName"
+                        placeholder="e.g. Ravi Kumar"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="drvEmail"
+                        placeholder="e.g. ravi@email.com"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="drvPassword"
+                        placeholder="Min 6 characters"></div>
+                <div class="form-group"><label>Phone</label><input type="text" id="drvPhone"
+                        placeholder="e.g. +91 98765 43210"></div>
+                <div class="form-group"><label>Driving License Number</label><input type="text" id="drvLicense"
+                        placeholder="e.g. TN0120210012345"></div>
+                <div class="form-group"><label>Vehicle Number</label><input type="text" id="drvVehicle"
+                        placeholder="e.g. TN 01 AB 1234"></div>
+                <div class="form-group"><label>Vehicle Type</label>
+                    <select id="drvVehicleType">
+                        <option value="Truck">Truck</option>
+                        <option value="Van">Van</option>
+                        <option value="Bike">Bike</option>
+                    </select>
+                </div>
+                <p style="font-size:12px;color:#64748b;margin-top:8px;">⚠️ Driver will need admin approval before they
+                    can login.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('addDriverModal').classList.remove('active')">Cancel</button>
+                <button class="btn-modal primary" id="btnSubmitDriver">Add Driver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ASSIGN DRIVER MODAL ===== -->
+    <div class="modal-overlay" id="assignDriverModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>🚛 Assign Driver to Order <span id="assignOrderLabel"></span></h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('assignDriverModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:#64748b;font-size:13px;margin-bottom:12px;">Select a driver:</p>
+                <div id="availableDriversList">Loading...</div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('assignDriverModal').classList.remove('active')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="company-dashboard.js"></script>
+</body>
+
+</html>

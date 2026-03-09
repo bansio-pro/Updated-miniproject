@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | BuildEasy</title>
+    <meta name="description"
+        content="BuildEasy Admin Dashboard — Manage orders, materials, users, and AI analytics for the construction material delivery platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container"></div>
+
+    <!-- ======== SIDEBAR ======== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <div class="logo-icon">BE</div>
+            <h2>Build<span>Easy</span></h2>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <div class="nav-item active" data-page="page-dashboard">
+                <span class="icon">📊</span><span class="label">Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="page-orders">
+                <span class="icon">🛒</span><span class="label">Orders</span><span class="badge">0</span>
+            </div>
+            <div class="nav-item" data-page="page-users">
+                <span class="icon">👥</span><span class="label">Users</span><span class="badge">0</span>
+            </div>
+            <div class="nav-item" data-page="page-inventory">
+                <span class="icon">📦</span><span class="label">Materials</span>
+            </div>
+            <div class="nav-item" data-page="page-drivers">
+                <span class="icon">🚛</span><span class="label">Drivers</span><span class="badge">0</span>
+            </div>
+            <div class="nav-item" data-page="page-companies">
+                <span class="icon">🏢</span><span class="label">Companies</span><span class="badge">0</span>
+            </div>
+            <div class="nav-section-label">Intelligence</div>
+            <div class="nav-item" data-page="page-analytics">
+                <span class="icon">🤖</span><span class="label">AI Logs</span>
+            </div>
+            <div class="nav-item" data-page="page-reports">
+                <span class="icon">💰</span><span class="label">Revenue</span>
+            </div>
+            <div class="nav-section-label">System</div>
+            <div class="nav-item" data-page="page-settings">
+                <span class="icon">⚙️</span><span class="label">Settings</span>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="avatar">AD</div>
+            <div class="info">
+                <h4>Admin User</h4>
+                <p>Super Admin</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ======== TOP BAR ======== -->
+    <header class="admin-topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+            <div>
+                <div class="page-title">Dashboard</div>
+                <div class="breadcrumb">Admin / Dashboard</div>
+            </div>
+        </div>
+        <div class="topbar-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search anything…" id="globalSearch">
+        </div>
+        <div class="topbar-right">
+            <button class="topbar-btn" title="Notifications">🔔<span class="notif-dot"></span></button>
+            <div class="topbar-profile">
+                <div class="avatar">AD</div>
+                <div>
+                    <div class="name">Admin</div>
+                    <div class="role">Super Admin</div>
+                </div>
+            </div>
+            <button class="btn-logout">🚪 Logout</button>
+        </div>
+    </header>
+
+    <!-- ======== MAIN CONTENT ======== -->
+    <main class="admin-main">
+
+        <!-- ===== DASHBOARD OVERVIEW ===== -->
+        <section class="admin-page active" id="page-dashboard">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="card-icon blue">🛒</div>
+                    <h3>—</h3>
+                    <p>Total Orders</p>
+                    <div class="trend up">↑ Live from DB</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon green">🚚</div>
+                    <h3>—</h3>
+                    <p>Active Deliveries</p>
+                    <div class="trend up">↑ Real-time</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon orange">👥</div>
+                    <h3>—</h3>
+                    <p>Total Users</p>
+                    <div class="trend up">↑ All registered</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon purple">💰</div>
+                    <h3>—</h3>
+                    <p>Total Revenue</p>
+                    <div class="trend up">↑ Paid orders</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon red">🚨</div>
+                    <h3>—</h3>
+                    <p>Low Stock Alerts</p>
+                    <div class="trend down">↓ Below threshold</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon blue">⏳</div>
+                    <h3>—</h3>
+                    <p>Pending Approvals</p>
+                    <div class="trend up">↑ Needs action</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon green">🏢</div>
+                    <h3>—</h3>
+                    <p>Total Companies</p>
+                    <div class="trend up">↑ Marketplace</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon orange">⏳</div>
+                    <h3>—</h3>
+                    <p>Pending Companies</p>
+                    <div class="trend up">↑ Awaiting</div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h4>📊 Monthly Order Statistics</h4>
+                    <div style="height:280px"><canvas id="ordersChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h4>📈 Material Demand Breakdown</h4>
+                    <div style="height:280px"><canvas id="demandChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="bottom-row">
+                <div class="table-card">
+                    <div class="table-header">
+                        <h4>🕐 Recent Orders</h4>
+                        <button class="btn-sm btn-accent"
+                            onclick="document.querySelector('[data-page=page-orders]').click()">View All</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Material</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alerts-card">
+                    <h4>🚨 Low Stock Alerts</h4>
+                    <div class="empty-state">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ORDERS MANAGEMENT ===== -->
+        <section class="admin-page" id="page-orders">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>🛒 Orders Management</h4>
+                </div>
+                <div class="filter-bar">
+                    <select onchange="filterOrders(this.value)">
+                        <option value="all">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Ready">Ready</option>
+                        <option value="Out for Delivery">Out for Delivery</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Driver</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== DRIVERS MANAGEMENT ===== -->
+        <section class="admin-page" id="page-drivers">
+            <!-- Driver statistics cards -->
+            <div class="summary-grid" style="margin-bottom: 24px;" id="driverStatsGrid">
+                <div class="summary-card">
+                    <div class="card-icon blue">🚛</div>
+                    <h3 id="statTotalDrivers">—</h3>
+                    <p>Total Drivers</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon orange">⏳</div>
+                    <h3 id="statPendingDrivers">—</h3>
+                    <p>Pending Approval</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon green">✅</div>
+                    <h3 id="statApprovedDrivers">—</h3>
+                    <p>Approved Drivers</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon red">🚫</div>
+                    <h3 id="statSuspendedDrivers">—</h3>
+                    <p>Suspended Drivers</p>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>🚛 Driver Management</h4>
+                    <button class="btn-sm btn-accent"
+                        onclick="document.getElementById('addDriverModal').classList.add('active')">+ Add
+                        Driver</button>
+                </div>
+
+                <!-- Status Filter Tabs -->
+                <div class="filter-tabs" id="driverStatusTabs" style="margin-bottom: 20px; display: flex; gap: 10px;">
+                    <button class="filter-tab active" data-status="all">All</button>
+                    <button class="filter-tab" data-status="Pending">Pending</button>
+                    <button class="filter-tab" data-status="Approved">Approved</button>
+                    <button class="filter-tab" data-status="Rejected">Rejected</button>
+                    <button class="filter-tab" data-status="Suspended">Suspended</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Driver Name</th>
+                            <th>Phone</th>
+                            <th>Vehicle Number</th>
+                            <th>Company Name</th>
+                            <th>License Number</th>
+                            <th>Verification Status</th>
+                            <th>Account</th>
+                            <th>GPS</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="driversTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== USER MANAGEMENT ===== -->
+        <section class="admin-page" id="page-users">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>👥 User Management</h4>
+                    <button class="btn-sm btn-accent"
+                        onclick="document.getElementById('addUserModal').classList.add('active')">+ Add User</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== MATERIALS INVENTORY ===== -->
+        <section class="admin-page" id="page-inventory">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>📦 Materials Inventory</h4>
+                    <button class="btn-sm btn-accent" data-open-modal>+ Add Material</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Level</th>
+                            <th>Approved</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== COMPANIES MANAGEMENT ===== -->
+        <section class="admin-page" id="page-companies">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4>🏢 Companies Management</h4>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Owner</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companiesTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align:center;padding:40px;color:#64748b;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== AI ANALYTICS / LOGS ===== -->
+        <section class="admin-page" id="page-analytics">
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h4>🏗️ AI Stage Detection Distribution</h4>
+                    <div style="height:280px"><canvas id="stageChart"></canvas></div>
+                </div>
+                <div class="analytics-card">
+                    <h4>📦 Most Ordered Materials</h4>
+                    <div style="height:280px"><canvas id="topMaterialsChart"></canvas></div>
+                </div>
+            </div>
+            <div class="analytics-card" style="margin-bottom:28px">
+                <h4>🏆 Supplier Performance Ranking</h4>
+                <div class="rank-item">
+                    <div class="rank-num gold">1</div>
+                    <div class="rank-info">
+                        <h5>ACC Limited</h5>
+                        <p>Cement & Concrete — 98.5% on-time delivery</p>
+                    </div>
+                    <div class="rank-stars">★★★★★</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-num gold">2</div>
+                    <div class="rank-info">
+                        <h5>Tata Steel</h5>
+                        <p>TMT Steel & Rods — 97.2% on-time delivery</p>
+                    </div>
+                    <div class="rank-stars">★★★★★</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-num silver">3</div>
+                    <div class="rank-info">
+                        <h5>Ultratech</h5>
+                        <p>Cement & AAC Blocks — 94.8% on-time delivery</p>
+                    </div>
+                    <div class="rank-stars">★★★★☆</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-num silver">4</div>
+                    <div class="rank-info">
+                        <h5>Ambuja Cements</h5>
+                        <p>PPC Cement — 92.1% on-time delivery</p>
+                    </div>
+                    <div class="rank-stars">★★★★☆</div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-num bronze">5</div>
+                    <div class="rank-info">
+                        <h5>Local Sand Quarry</h5>
+                        <p>Sand & Gravel — 85.4% on-time delivery</p>
+                    </div>
+                    <div class="rank-stars">★★★☆☆</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== REVENUE REPORTS ===== -->
+        <section class="admin-page" id="page-reports">
+            <div class="summary-grid" style="margin-bottom:24px">
+                <div class="summary-card">
+                    <div class="card-icon blue">💰</div>
+                    <h3>—</h3>
+                    <p>Total Revenue</p>
+                    <div class="trend up">↑ Paid orders</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon green">📦</div>
+                    <h3>—</h3>
+                    <p>Total Orders</p>
+                    <div class="trend up">↑ All time</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon orange">⏱️</div>
+                    <h3>—</h3>
+                    <p>Avg Delivery Time</p>
+                    <div class="trend down">↓ Faster</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon purple">⭐</div>
+                    <h3>—</h3>
+                    <p>Customer Satisfaction</p>
+                    <div class="trend up">↑ Positive</div>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h4>📊 Revenue Overview</h4>
+                <div style="height:300px"><canvas id="revenueChart"></canvas></div>
+            </div>
+        </section>
+
+        <!-- ===== SETTINGS ===== -->
+        <section class="admin-page" id="page-settings">
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h4>🔒 Change Admin Password</h4>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" id="settCurrentPass" placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password (min 6 chars)</label>
+                        <input type="password" id="settNewPass" placeholder="Enter new password">
+                    </div>
+                    <button class="btn-sm btn-accent" style="margin-top:8px" onclick="changeAdminPassword()">Update
+                        Password</button>
+                </div>
+                <div class="settings-card">
+                    <h4>🔔 Notifications</h4>
+                    <div class="toggle-row">
+                        <div><label>Email Notifications</label>
+                            <p>Receive order updates via email</p>
+                        </div>
+                        <button class="toggle active"></button>
+                    </div>
+                    <div class="toggle-row">
+                        <div><label>SMS Alerts</label>
+                            <p>Get SMS for critical stock alerts</p>
+                        </div>
+                        <button class="toggle active"></button>
+                    </div>
+                    <div class="toggle-row">
+                        <div><label>Push Notifications</label>
+                            <p>Browser push for new orders</p>
+                        </div>
+                        <button class="toggle"></button>
+                    </div>
+                    <div class="toggle-row">
+                        <div><label>AI Insights</label>
+                            <p>Daily AI prediction summaries</p>
+                        </div>
+                        <button class="toggle active"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== ADD MATERIAL MODAL ===== -->
+    <div class="modal-overlay" id="materialModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>Add New Material</h3>
+                <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Material Name</label><input type="text"
+                        placeholder="e.g. OPC Cement 43 Grade"></div>
+                <div class="form-group"><label>Category</label>
+                    <select>
+                        <option>Cement</option>
+                        <option>Steel</option>
+                        <option>Sand</option>
+                        <option>Bricks</option>
+                        <option>Paint</option>
+                        <option>Aggregates</option>
+                        <option>Tiles</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Price (₹)</label><input type="number" placeholder="e.g. 380"></div>
+                <div class="form-group"><label>Stock Quantity</label><input type="number" placeholder="e.g. 500"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('materialModal').classList.remove('active')">Cancel</button>
+                <button class="btn-modal primary">Add Material</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+
+    <!-- ===== ADD USER MODAL ===== -->
+    <div class="modal-overlay" id="addUserModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>Add New User</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('addUserModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Full Name</label><input type="text" id="newUserName"
+                        placeholder="e.g. Rajesh Kumar"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="newUserEmail"
+                        placeholder="e.g. rajesh@example.com"></div>
+                <div class="form-group"><label>Password (min 6 chars)</label><input type="password" id="newUserPass"
+                        placeholder="Create password"></div>
+                <div class="form-group"><label>Role</label>
+                    <select id="newUserRole">
+                        <option value="customer">Customer</option>
+                        <option value="driver">Driver</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('addUserModal').classList.remove('active')">Cancel</button>
+                <button class="btn-modal primary" onclick="addNewUser()">Add User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ADD DRIVER MODAL ===== -->
+    <div class="modal-overlay" id="addDriverModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>Add New Driver</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('addDriverModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Driver Name</label><input type="text" id="newDriverName"
+                        placeholder="e.g. Ravi Kumar"></div>
+                <div class="form-group"><label>Phone Number</label><input type="text" id="newDriverPhone"
+                        placeholder="e.g. +91 98765 43210"></div>
+                <div class="form-group"><label>Vehicle Number</label><input type="text" id="newDriverVehicle"
+                        placeholder="e.g. TN 01 AB 1234"></div>
+                <div class="form-group"><label>Driving License Number</label><input type="text" id="newDriverLicense"
+                        placeholder="e.g. KL12 20230001234"></div>
+                <div class="form-group"><label>Vehicle Type</label>
+                    <select id="newDriverVehicleType">
+                        <option value="Truck">Truck</option>
+                        <option value="Van">Van</option>
+                        <option value="Bike">Bike</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('addDriverModal').classList.remove('active')">Cancel</button>
+                <button class="btn-modal primary" onclick="addNewDriver()">Add Driver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ASSIGN DRIVER MODAL ===== -->
+    <div class="modal-overlay" id="assignDriverModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>🚛 Assign Driver to Order <span id="assignOrderIdLabel"></span></h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('assignDriverModal').classList.remove('active')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:#64748b;font-size:13px;margin-bottom:12px;">Select an available driver:</p>
+                <div id="availableDriversList" style="display:flex;flex-direction:column;gap:8px;">Loading drivers...
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal ghost"
+                    onclick="document.getElementById('assignDriverModal').classList.remove('active')">Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildEasy — Driver Dashboard</title>
+    <meta name="description" content="BuildEasy Driver Dashboard — Manage your deliveries and track orders">
+    <link rel="stylesheet" href="driver-dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ═══════ SIDEBAR ═══════ -->
+    <aside class="dd-sidebar" id="ddSidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">🚛</div>
+                <div>
+                    <div class="logo-title">BuildEasy</div>
+                    <div class="logo-subtitle">Driver Portal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="driver-info">
+            <div class="driver-avatar" id="sidebarAvatar">DR</div>
+            <div class="driver-meta">
+                <div class="driver-name" id="sidebarDriverName">Driver</div>
+                <div class="driver-company" id="sidebarCompanyName">Company</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-item active" data-page="page-dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="label">Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="page-deliveries">
+                <span class="nav-icon">📦</span>
+                <span class="label">My Deliveries</span>
+                <span class="nav-badge" id="deliveryBadge">0</span>
+            </div>
+            <div class="nav-item" data-page="page-history">
+                <span class="nav-icon">📋</span>
+                <span class="label">History</span>
+            </div>
+            <div class="nav-item" data-page="page-profile">
+                <span class="nav-icon">👤</span>
+                <span class="label">Profile</span>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="btnLogout">🚪 Logout</button>
+        </div>
+    </aside>
+
+    <!-- ═══════ MAIN CONTENT ═══════ -->
+    <main class="dd-main">
+        <!-- Top Bar -->
+        <header class="dd-topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <span class="breadcrumb">Driver / Dashboard</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-avatar" id="topbarAvatar">DR</div>
+                <span class="topbar-name" id="topbarDriverName">Driver</span>
+            </div>
+        </header>
+
+        <!-- ═══════ PAGE: DASHBOARD ═══════ -->
+        <section class="dd-page active" id="page-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card assigned">
+                    <div class="stat-icon">📥</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="statAssigned">0</div>
+                        <div class="stat-label">Assigned Orders</div>
+                    </div>
+                </div>
+                <div class="stat-card delivery">
+                    <div class="stat-icon">🚚</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="statOutForDelivery">0</div>
+                        <div class="stat-label">Out for Delivery</div>
+                    </div>
+                </div>
+                <div class="stat-card completed">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="statCompleted">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+                <div class="stat-card revenue">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="statCollected">₹0</div>
+                        <div class="stat-label">Cash Collected</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>🔔 Active Deliveries</h2>
+                </div>
+                <div id="activeDeliveriesList" class="deliveries-list">
+                    <p class="empty-state">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ PAGE: MY DELIVERIES ═══════ -->
+        <section class="dd-page" id="page-deliveries">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>📦 All Assigned Orders</h2>
+                </div>
+                <div class="table-wrap">
+                    <table class="dd-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Address</th>
+                                <th>Materials</th>
+                                <th>Total</th>
+                                <th>Delivery Status</th>
+                                <th>Payment</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deliveriesTableBody">
+                            <tr>
+                                <td colspan="8" class="empty-cell">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ PAGE: HISTORY ═══════ -->
+        <section class="dd-page" id="page-history">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>📋 Delivery History</h2>
+                </div>
+                <div class="table-wrap">
+                    <table class="dd-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Materials</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Delivered On</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="6" class="empty-cell">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ PAGE: PROFILE ═══════ -->
+        <section class="dd-page" id="page-profile">
+            <div class="profile-grid">
+                <div class="section-card profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar" id="profileAvatar">DR</div>
+                        <div>
+                            <h2 id="profileName">Driver Name</h2>
+                            <span class="profile-role">🚛 Delivery Driver</span>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <div class="detail-row">
+                            <span class="detail-label">📧 Email</span>
+                            <span class="detail-value" id="profileEmail">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">📱 Phone</span>
+                            <span class="detail-value" id="profilePhone">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">🪪 License No.</span>
+                            <span class="detail-value" id="profileLicense">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">🚗 Vehicle</span>
+                            <span class="detail-value" id="profileVehicle">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">🏢 Company</span>
+                            <span class="detail-value" id="profileCompany">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">✅ Status</span>
+                            <span class="detail-value" id="profileApproval">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">📅 Joined</span>
+                            <span class="detail-value" id="profileJoined">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="driver-dashboard.js"></script>
+</body>
+
+</html>

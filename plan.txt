@@ -1,0 +1,30 @@
+backend/
+│
+├── config/
+│   └── db.js
+│
+├── models/
+│   ├── User.js
+│   ├── Material.js
+│   ├── Order.js
+│   └── Driver.js
+│
+├── controllers/
+│   ├── authController.js
+│   ├── materialController.js
+│   ├── orderController.js
+│   └── trackingController.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── materialRoutes.js
+│   ├── orderRoutes.js
+│   └── trackingRoutes.js
+│
+├── middleware/
+│   ├── authMiddleware.js
+│   └── roleMiddleware.js
+│
+├── .env
+├── package.json
+└── server.js

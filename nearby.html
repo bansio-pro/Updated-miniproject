@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Companies | BuildEasy</title>
+    <meta name="description"
+        content="Find construction material suppliers near your location with BuildEasy's geo-based search.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .nearby-hero {
+            background: linear-gradient(135deg, var(--grey-900) 0%, #1a2744 50%, var(--grey-800) 100%);
+            padding: 120px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nearby-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.12), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .nearby-hero h1 {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .nearby-hero h1 .hl {
+            background: linear-gradient(135deg, #fb923c, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nearby-hero p {
+            color: var(--grey-400);
+            font-size: 16px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .search-panel {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px 32px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .search-panel .form-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .search-panel label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--grey-400);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .search-panel input,
+        .search-panel select {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-panel input:focus,
+        .search-panel select:focus {
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+        }
+
+        .search-panel input::placeholder {
+            color: #475569;
+        }
+
+        .search-panel select option {
+            background: #1e293b;
+        }
+
+        .btn-detect {
+            padding: 12px 16px;
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+            border: 1px dashed rgba(249, 115, 22, 0.4);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-detect:hover {
+            background: rgba(249, 115, 22, 0.2);
+        }
+
+        .btn-search {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(249, 115, 22, 0.35);
+        }
+
+        .results-section {
+            padding: 60px 0 80px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .results-header h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--grey-900);
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: var(--grey-500);
+            font-weight: 500;
+        }
+
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .company-card {
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .company-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange-400), var(--orange-600));
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .company-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
+        }
+
+        .company-card:hover::before {
+            opacity: 1;
+        }
+
+        .company-card .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .company-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--grey-900);
+            margin-bottom: 8px;
+        }
+
+        .company-card .meta {
+            font-size: 13px;
+            color: var(--grey-500);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .company-card .btn-materials {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .company-card .btn-materials:hover {
+            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .materials-expand {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--grey-200);
+            display: none;
+        }
+
+        .materials-expand.open {
+            display: block;
+        }
+
+        .materials-expand h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--grey-700);
+            margin-bottom: 10px;
+        }
+
+        .mat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--grey-100);
+            font-size: 13px;
+        }
+
+        .mat-item:last-child {
+            border-bottom: none;
+        }
+
+        .mat-item .mat-name {
+            color: var(--grey-800);
+            font-weight: 500;
+        }
+
+        .mat-item .mat-price {
+            color: var(--orange-600);
+            font-weight: 700;
+        }
+
+        .empty-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--grey-500);
+        }
+
+        .empty-results .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-results h3 {
+            font-size: 20px;
+            color: var(--grey-700);
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .search-panel {
+                flex-direction: column;
+            }
+
+            .search-panel .form-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <section class="nearby-hero">
+        <div class="container">
+            <h1>Find <span class="hl">Nearby Suppliers</span></h1>
+            <p>Discover construction material companies near your location</p>
+
+            <div class="search-panel">
+                <div class="form-group">
+                    <label>Latitude</label>
+                    <input type="number" step="any" id="searchLat" placeholder="e.g. 13.0827">
+                </div>
+                <div class="form-group">
+                    <label>Longitude</label>
+                    <input type="number" step="any" id="searchLng" placeholder="e.g. 80.2707">
+                </div>
+                <div class="form-group">
+                    <label>Radius</label>
+                    <select id="searchRadius">
+                        <option value="5000">5 km</option>
+                        <option value="10000" selected>10 km</option>
+                        <option value="25000">25 km</option>
+                        <option value="50000">50 km</option>
+                    </select>
+                </div>
+                <button class="btn-detect" onclick="detectLocation()">📍 Detect</button>
+                <button class="btn-search" onclick="searchNearby()">🔍 Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div class="container">
+            <div class="results-header">
+                <h2>Search Results</h2>
+                <span class="results-count" id="resultsCount"></span>
+            </div>
+            <div id="resultsGrid" class="company-grid">
+                <div class="empty-results">
+                    <div class="emoji">📍</div>
+                    <h3>Enter your location to start</h3>
+                    <p>Use "Detect" to auto-fill your coordinates, then click "Search"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="navbar-loader.js"></script>
+    <script src="nearby.js"></script>
+</body>
+
+</html>

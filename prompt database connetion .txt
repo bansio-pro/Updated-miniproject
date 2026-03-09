@@ -1,0 +1,11 @@
+Create a MongoDB Atlas connection module for a Node.js Express backend using mongoose.
+
+Requirements:
+- Use async/await
+- Read connection string from process.env.MONGO_URI
+- Handle connection errors properly
+- Exit process if connection fails
+- Export  the connection function
+- Log: "MongoDB Atlas Connected" on success
+- Use modern best practices
+- No deprecated mongoose options

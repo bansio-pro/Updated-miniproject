@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Materials | BuildEasy</title>
+    <meta name="description"
+        content="Browse and order quality construction materials with real-time pricing, cart system, and secure checkout.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="materials.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR (loaded dynamically) -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="mat-toast-container" id="matToastContainer"></div>
+
+    <!-- ======== MATERIALS PAGE ======== -->
+    <section class="mat-page">
+        <div class="container">
+
+            <!-- Page Hero -->
+            <div class="mat-hero fade-in">
+                <div class="hero-icon-box">🛒</div>
+                <h1>Order <span>Materials</span></h1>
+                <p>Browse quality construction materials from verified suppliers with real-time pricing</p>
+            </div>
+
+            <!-- Controls Bar -->
+            <div class="mat-controls fade-in">
+                <div class="mat-search">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search materials...">
+                </div>
+                <button class="cart-toggle-btn" id="cartToggleBtn" onclick="toggleCart()">
+                    🛒 Cart <span class="cart-badge empty" id="cartBadge">0</span>
+                </button>
+            </div>
+
+            <!-- Inline Filter Bar -->
+            <div class="mat-filters fade-in">
+                <div class="filter-group filter-group--tags">
+                    <span class="filter-label">Material Type</span>
+                    <div class="filter-tags" id="typeFilters">
+                        <label class="filter-tag"><input type="checkbox" name="type" value="Cement"><span>🧱
+                                Cement</span></label>
+                        <label class="filter-tag"><input type="checkbox" name="type" value="Sand"><span>🏖️
+                                Sand</span></label>
+                        <label class="filter-tag"><input type="checkbox" name="type" value="Steel"><span>🔩
+                                Steel</span></label>
+                        <label class="filter-tag"><input type="checkbox" name="type" value="Bricks"><span>🧱
+                                Bricks</span></label>
+                        <label class="filter-tag"><input type="checkbox" name="type" value="Aggregates"><span>🪨
+                                Aggregates</span></label>
+                        <label class="filter-tag"><input type="checkbox" name="type" value="Paint"><span>🎨
+                                Paint</span></label>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label" for="priceRange">Price Range</label>
+                    <select id="priceRange" class="filter-select">
+                        <option value="">All Prices</option>
+                        <option value="0-500">₹0 – ₹500</option>
+                        <option value="500-1000">₹500 – ₹1000</option>
+                        <option value="1000-5000">₹1000 – ₹5000</option>
+                        <option value="5000-999999">₹5000+</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label" for="sortBy">Sort By</label>
+                    <select id="sortBy" class="filter-select">
+                        <option value="">Default</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Results Count -->
+            <div class="results-bar fade-in" id="resultsBar">
+                <span id="resultCount">0</span> materials found
+                <button class="clear-filters-btn" id="clearFiltersBtn" onclick="clearAllFilters()">✕ Clear
+                    Filters</button>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="productGrid">
+                <!-- Populated by JS -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ======== CART OVERLAY ======== -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- ======== CART SIDEBAR ======== -->
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>🛒 Your Cart</h2>
+            <button class="cart-close" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items rendered by JS -->
+        </div>
+        <div class="cart-footer" id="cartFooter">
+            <div class="cart-total-row">
+                <span class="label">Subtotal</span>
+                <span class="value" id="cartSubtotal">₹0</span>
+            </div>
+            <div class="cart-total-row grand">
+                <span class="label">Total</span>
+                <span class="value" id="cartTotal">₹0</span>
+            </div>
+            <div class="cart-location">
+                <label>📍 Delivery Address <span style="color:#dc2626;">*</span></label>
+                <textarea id="deliveryAddress" rows="3"
+                    placeholder="Enter full delivery address (e.g., Plot 12, 3rd Street, T. Nagar, Chennai - 600017)"></textarea>
+                <button class="btn-use-location" id="btnGetLocation" onclick="useCurrentLocation()">
+                    <span id="locBtnIcon">📍</span>
+                    <span id="locBtnText">Use My Current Location</span>
+                </button>
+                <div class="location-status" id="locationStatus"></div>
+            </div>
+            <button class="btn-place-order" id="btnPlaceOrder" onclick="placeOrder()">
+                📦 Place Order
+            </button>
+            <button class="btn-clear-cart" onclick="clearCart()">🗑️ Clear Cart</button>
+        </div>
+    </aside>
+
+    <!-- ======== SUCCESS MODAL ======== -->
+    <div class="success-modal-overlay" id="successModal">
+        <div class="success-modal">
+            <div class="success-icon">✓</div>
+            <h2>Order Placed!</h2>
+            <p>Your order has been successfully placed and is being processed.</p>
+            <div class="order-id-display" id="successOrderId">ORD-XXXX</div>
+            <p>You can track your order status in the My Orders page.</p>
+            <div class="btn-group">
+                <button class="btn-secondary" onclick="closeSuccessModal()">Continue Shopping</button>
+                <a href="my-orders.html" class="btn-primary" style="text-align:center; text-decoration:none;">View My
+                    Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 BuildEasy | Smart Construction Assistant — Mini Project</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="navbar-loader.js"></script>
+    <script src="materials.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
